@@ -22,7 +22,7 @@ geodata <- readLines(textConnection(getURL("https://sickhacks.s3-us-west-2.amazo
 
 # Leaflet Model
 
-leaflet(df) %>% setView(lng = -76.881929, lat = 38.91535, zoom = 8) %>%
+m <- leaflet(df) %>% setView(lng = -76.881929, lat = 38.91535, zoom = 8) %>%
   addProviderTiles("CartoDB.Positron") %>% 
   addGeoJSON(geodata, weight = 0.5, color = "#444444", fill = TRUE, fillOpacity = 0.5) %>%
   addCircles(data = df, ~longitude, ~latitude, 
@@ -43,7 +43,7 @@ leaflet(df) %>% setView(lng = -76.881929, lat = 38.91535, zoom = 8) %>%
                      "<b>Not insured (%):</b>", df$uninsured, "</br>",
                      "<b>FLU and COLD RISK INDEX (%):", df$index, "</b></br>"),
                    options = popupOptions(closeOnClick = TRUE, closeButton = TRUE)) %>%
-  addCircles(data = md, lng = ~X, lat = ~Y, stroke = FALSE) %>%
+  addCircles(data = md, lng = ~X, lat = ~Y, color = "yellow", stroke = TRUE) %>%
   addCircleMarkers(data = md, color = "yellow", lng = ~X, lat = ~Y, 
                    stroke = FALSE, fill = FALSE,
                    popup = paste(
@@ -53,5 +53,5 @@ leaflet(df) %>% setView(lng = -76.881929, lat = 38.91535, zoom = 8) %>%
 
 # m
 
-# library(htmlwidgets)
-# saveWidget(m, file = "m.html")
+library(htmlwidgets)
+saveWidget(m, file = "m.html")
