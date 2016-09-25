@@ -6,21 +6,23 @@ rm(list=ls())
 # Leaflet
 ##########################
 
+library(RCurl)
 library(htmltools)
 library(jsonlite)
 library(leaflet)
 library(htmlwidgets)
+library(dplyr)
 
 # Reading in Files
-df <- read.csv("zip_final.csv", stringsAsFactors = FALSE) # Demo data with swAPI
-md <- read.csv("md.csv", stringsAsFactors = FALSE) # MD hospitals
+df <- read.csv(textConnection(getURL("https://sickhacks.s3-us-west-2.amazonaws.com/zip_final.csv")), stringsAsFactors = FALSE) # Demo data with swAPI
+md <- read.csv(textConnection(getURL("https://sickhacks.s3-us-west-2.amazonaws.com/md.csv")), stringsAsFactors = FALSE) # Hospital Data
 
 # Maryland JSON
-geodata <- readLines("maryland-zips-single.geojson") %>% paste(collapse = "\n")
+geodata <- readLines(textConnection(getURL("https://sickhacks.s3-us-west-2.amazonaws.com/maryland-zips-single.geojson"))) %>% paste(collapse = "\n")
 
 # Leaflet Model
 
-leaflet(df) %>% setView(lng = -76.6141, lat = 39.3012, zoom = 13) %>%
+leaflet(df) %>% setView(lng = -76.881929, lat = 38.91535, zoom = 8) %>%
   addProviderTiles("CartoDB.Positron") %>% 
   addGeoJSON(geodata, weight = 0.5, color = "#444444", fill = TRUE, fillOpacity = 0.5) %>%
   addCircles(data = df, ~longitude, ~latitude, 
